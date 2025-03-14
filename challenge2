@@ -1,0 +1,21 @@
+responses = {
+	"hello": "hello, HGow can I help you?",
+	"hi": "hi what can I do",
+	"how are you": "im just a bot, but in doing great",
+	"tell me about iloilo": "iloilo has phinma",
+	"tell me aout phinma": "phinma is a school",
+	"bye": "good bye",
+}
+
+def get_bot_response(user_input):
+  return responses.get(user_input, "I don't understand.")
+
+  def main():
+    while True:
+      user_input = input ("You:")
+      response = get_bot_response(user_input)
+      print(f"chatbot:{response}")
+      if user_input == "bye":
+      break
+if_name_=="_main_":
+  main()

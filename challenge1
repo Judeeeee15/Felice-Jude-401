@@ -1,0 +1,16 @@
+import json
+
+places = []
+
+while True:
+place = input("Enter a place (or 'q' to quit:)")
+
+if place.lower() == 'q':
+break
+places.append(place)
+
+places_json = json.dumps(places)
+
+print("\nAll places entered:")
+for place in places:
+print(place)
