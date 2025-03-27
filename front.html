@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Location Mapping App</title>
+    <link rel="stylesheet" href="front.css">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
+</head>
+<style>
+    body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    background-color: #08c9b9;
+}
+
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    background: white;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+.input-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+input {
+    width: 60%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: white;
+    background: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+button:hover {
+    background: #0056b3;
+}
+
+#locationsList {
+    list-style: none;
+    padding: 0;
+}
+
+#locationsList li {
+    background: #ddd;
+    padding: 10px;
+    margin: 5px 0;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+#map {
+    height: 400px;
+    width: 100%;
+    margin-top: 20px;
+    border-radius: 10px;
+}
+
+</style>
+<body>
+    <div class="container">
+        <h1>Location Mapping App</h1>
+        
+        <div class="input-container">
+            <input type="text" id="locationInput" placeholder="Enter a location name...">
+            <button id="addLocationButton">Add Location</button>
+        </div>
+
+        <ul id="locationsList"></ul>
+
+        <div id="map"></div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="location.js"></script>
+</body>
+<script>
+    
+        const locationInput = document.getElementById("locationInput");
+        const addLocationButton = document.getElementById("addLocationButton");
+        const locationsList = document.getElementById("locationsList");
+
+        let locationsArray = [];
+        let map;
+
+        addLocationButton.addEventListener("click", addLocation);
+
+        function addLocation() {
+            const location = locationInput.value.trim();
+            if (location !== "") {
+                locationsArray.push(location);
+                locationInput.value = "";
+                updateLocationsList();
+                updateMap(location);
+            }
+        }
+
+        function updateLocationsList() {
+            locationsList.innerHTML = "";
+            locationsArray.forEach((location) => {
+                const li = document.createElement("li");
+                li.textContent = location;
+                li.addEventListener("click", () => updateMap(location));
+                locationsList.appendChild(li);
+            });
+        }
+
+        function updateMap(location) {
+            if (!map) {
+                map = L.map("map").setView([13.41, 122.56], 5);
+                L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+                    attribution: "© OpenStreetMap contributors"
+                }).addTo(map);
+            }
+
+            const coordinates = getCoordinatesForLocation(location);
+            if (coordinates) {
+                map.setView(coordinates, 6);
+                L.marker(coordinates).addTo(map).bindPopup(location);
+            } else {
+                alert("Location not found or coordinates not available.");
+            }
+        }
+
+        function getCoordinatesForLocation(location) {
+            const locationCoordinates = {
+                "philippines": [13.41, 122.56],
+                "taiwan": [23.697809, 120.960518],
+                "manila": [14.599512, 120.984222],
+                "iloilo": [10.720150, 122.562103]
+            };
+
+            return locationCoordinates[location.toLowerCase()];
+        }
+    
+</script>
+</html>
